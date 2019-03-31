@@ -22,14 +22,12 @@ public class Ant {
     }
     public void setStart(City firstCity){
         path.clear();
-        allowed.clear();
         usedEdges.clear();
         path.add(firstCity);
-        allowed.add(firstCity);
         currentCity = firstCity;
         this.firstCity = firstCity;
-       // allowed = new ArrayList<>(weightedGraph.getCities());
-      //  allowed.remove(firstCity);
+        allowed = new ArrayList<>(weightedGraph.getCities());
+        allowed.remove(firstCity);
 
     }
     public Arc nextCity(){
@@ -42,97 +40,65 @@ public class Ant {
             double nominator;
             double bestNominator = 0;
             City bestChoice = null;
-          //  Arc bestChoice = null;
             Arc arc;
 
-/*
-            List<City> alloweds = new ArrayList<>();
-            int i=0;
-            for(City city : currentCity.getDistances().keySet()){
-                if(i == 20)
-                    break;
-                if(allowed.contains(city)) {
-                    alloweds.add(city);
-                    i++;
-                }
-            }
-     */
+            for (City neighbour : allowed) {
 
-            for (/*City neighbour : allowed*//*Arc edgeToNeighbour : currentCity.getCandidateList()*/City neighbour : currentCity.getCandidatesList()) {
-                if(!allowed.contains(neighbour)) {
-                    arc = weightedGraph.getArcBetween(currentCity, neighbour);
-                    nominator = arc.getPheromone() * Math.pow(1.0 / arc.getLength(), AntParams.DISTANCE_INFLUENCE);
-                    nominators[neighbour.getId()-1] = nominator;
-                   // arc.setProbability(nominator);
-                    denominatorSum += nominator;
-                    if (nominator > bestNominator) {
-                        bestNominator = nominator;
-                        //   bestChoice = neighbour;
-                        bestChoice = neighbour;
-                    }
+                arc = weightedGraph.getArcBetween(currentCity, neighbour);
+                nominator = Math.pow(arc.getPheromone(), AntParams.ξ) * Math.pow(1.0 / arc.getLength(), AntParams.DISTANCE_INFLUENCE);
+                nominators[neighbour.getId()-1] = nominator;
+                denominatorSum += nominator;
+                if (nominator > bestNominator) {
+                    bestNominator = nominator;
+                    bestChoice = neighbour;
                 }
             }
-            if(bestChoice == null){
-                return fallback();
-            }
-/*
+
             if (bestChoice == null) {
                 arc = weightedGraph.getArcBetween(currentCity, firstCity);
                 currentCity = firstCity;
                 path.add(firstCity);
                 pathCost += arc.getLength();
-
                 return arc;
-            }*/
+            }
 
-          //  allowed.remove(bestChoice);
+            allowed.remove(bestChoice);
 
-            if(AntParams.RANDOM.nextDouble() <= AntParams.EXPLORATION_FACTOR && currentCity.getCandidatesList().size() != 1) {
+            if(AntParams.RANDOM.nextDouble() <= AntParams.EXPLORATION_FACTOR && allowed.size() > 0) {
 
                 denominatorSum -= bestNominator;
-             //   Collections.shuffle(allowed);
-                double rand = AntParams.RANDOM.nextDouble() - 0.001;
-                for (/*City allowedNeighbour : allowed*//* Arc edgeToNeighbour : currentCity.getCandidateList()*/ City neighbour : currentCity.getCandidatesList()) {
-                    if(neighbour != bestChoice && !allowed.contains(neighbour)) {
-                  //  if(!usedEdges.contains(edgeToNeighbour) && edgeToNeighbour != bestChoice) {
-                        //    arc = weightedGraph.getArcBetween(currentCity, allowedNeighbour);
-                        double probability = nominators[neighbour.getId()-1] /
-                                denominatorSum;
+       //         Collections.shuffle(allowed);
+                double rand = AntParams.RANDOM.nextDouble();
+                double probSum=0;
+                City lastAllowed = null;
+                for (City allowedNeighbour : allowed) {
 
-                        rand -= probability;
-                        if (rand <= 0) {
-                            //arc.setPheromone((1-AntParams.ξ) * arc.getPheromone() + AntParams.ξ * AntParams.τ0);
-                            // 1 / (num_cities * L(NN))
+                    arc = weightedGraph.getArcBetween(currentCity, allowedNeighbour);
+                    double probability = nominators[allowedNeighbour.getId()-1] /
+                            denominatorSum;
 
-                            path.add(neighbour);
-                           // currentCity = allowedNeighbour;
-                          //  allowed.add(bestChoice);
-                         //   allowed.remove(allowedNeighbour);
-                            allowed.add(neighbour);
-                            arc = weightedGraph.getArcBetween(currentCity, neighbour);
-                            pathCost += arc.getLength();
-                            currentCity = neighbour;
-                            return arc;
-                        }
+                    probSum += probability;
+                    if (probSum >= rand) {
+                        path.add(allowedNeighbour);
+                        allowed.add(bestChoice);
+                        allowed.remove(allowedNeighbour);
+                        pathCost += arc.getLength();
+                        currentCity = allowedNeighbour;
+                        return arc;
                     }
+
+                    lastAllowed = allowedNeighbour;
                 }
-               /* Arc arc = weightedGraph.getArcBetween(currentCity, bestChoice);
-                arc.setPheromone((1-AntParams.VAPORIZATION_FACTOR) * arc.getPheromone() + AntParams.VAPORIZATION_FACTOR * AntParams.PHEROMONE_REGULATION);
-                path.add(bestChoice);
-                currentCity = bestChoice;*/
-                return fallback();
+                arc = weightedGraph.getArcBetween(currentCity, lastAllowed);
+                path.add(lastAllowed);
+                allowed.remove(lastAllowed);
+                allowed.add(bestChoice);
+                pathCost += arc.getLength();
+                currentCity = lastAllowed;
+                return arc;
             }
             else{
-         //       bestChoice.setVisited(true);
-
-                //arc.setPheromone((1-AntParams.ξ) * arc.getPheromone() + AntParams.ξ * AntParams.τ0);
-
                 path.add(bestChoice);
-
-
-               /* path.add(bestChoice);
-                currentCity = bestChoice;*/
-                allowed.add(bestChoice);
                 arc = weightedGraph.getArcBetween(currentCity, bestChoice);
                 pathCost += arc.getLength();
                 currentCity = bestChoice;

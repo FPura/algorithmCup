@@ -24,8 +24,9 @@ public class TwoOpt {
         int bestJ = 0;
         do{
             minChange = 0;
+
             for(int i = 1; i<route.size()-2; i++){
-                for(City candidate : route.get(i).getCandidatesList()){
+                /*for(City candidate : route.get(i).getCandidatesList()){
                     int j = route.indexOf(candidate);
                     if(j > i) {
                         change = computeGain(route, i, j);
@@ -35,8 +36,8 @@ public class TwoOpt {
                             bestJ = j;
                         }
                     }
-                }
-                /*
+                }*/
+
                 for(int j = i+1; j<route.size()-1; j++){
                     change = computeGain(route,i,j);
                     if(minChange > change){
@@ -44,7 +45,7 @@ public class TwoOpt {
                         bestI = i;
                         bestJ = j;
                     }
-                }*/
+                }
             }
             route = twoOptSwap(route, bestI, bestJ);
         }while(minChange < 0);
@@ -61,6 +62,26 @@ public class TwoOpt {
         newRoute.addAll(reverseSub);
         newRoute.addAll(restOfRoute);
 
+/*
+        List<City> newRoute = new ArrayList<>(route);
+
+        // 1. take route[0] to route[i-1] and add them in order to new_route
+        for (int c=0; c<=i-1; ++c) {
+            newRoute.set(c, tour.get(c));
+        }
+
+        // 2. take route[i] to route[k] and add them in reverse order to new_route
+        int dec = 0;
+        for (int c=i; c<=j; ++c) {
+            newRoute.set(c, tour.get(j-dec));
+            dec++;
+        }
+
+        // 3. take route[k+1] to end and add them in order to new_route
+        for (int c=j+1; c<tour.size(); ++c) {
+            newRoute.set(c, tour.get(c));
+        }
+        */
         return newRoute;
     }
 

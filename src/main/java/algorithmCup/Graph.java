@@ -26,6 +26,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Graph extends Application {
     private Stage primaryStage;
@@ -48,10 +49,13 @@ public class Graph extends Application {
         Button button = new Button("start");
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
+                AntParams.RANDOM = new Random();
+               // AntParams.ρ = AntParams.RANDOM.nextDouble();
+                //AntParams.ξ = AntParams.RANDOM.nextDouble();
                 Parser parser = new Parser();
                 WeightedGraph weightedGraph;
                 try {
-                    weightedGraph = parser.parse("C:\\Users\\Filippo\\Documents\\citta\\ch130.tsp");
+                    weightedGraph = parser.parse("C:\\Users\\Filippo\\Documents\\citta\\eil76.tsp");
 
                     NearestNeighbour nn = new NearestNeighbour(weightedGraph.getCities());
                     List<City> nnRoute = nn.computeRoute();
@@ -61,9 +65,9 @@ public class Graph extends Application {
 
                     AntParams.τ0 = 1.0/(weightedGraph.getCities().size() * nnLength);
                     int count=1;
-                    for(City city : weightedGraph.getCities()){
+                    for(int j = 0; j<weightedGraph.getCities().size(); j++){
                         for(int i = count; i<weightedGraph.getCities().size(); i++){
-                            weightedGraph.getArcBetween(city, weightedGraph.getCities().get(i)).setPheromone(1.0/(weightedGraph.getCities().size() * nnLength));
+                            weightedGraph.getArcBetween(weightedGraph.getCities().get(j), weightedGraph.getCities().get(i)).setPheromone(AntParams.τ0);
                         }
                         count++;
                     }
@@ -76,6 +80,8 @@ public class Graph extends Application {
                         series.getData().add(new XYChart.Data<>(city.getX(), city.getY()));
                     }
 
+                    System.out.println(AntParams.ρ);
+                    System.out.println(AntParams.ξ);
 /*
                     series.getData().clear();
                     for(City city : nnRoute){

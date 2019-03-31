@@ -51,7 +51,6 @@ public class WeightedGraph {
             uRep = findSet(graph.get(i).getStart());
             vRep = findSet(graph.get(i).getEnd());
             if (uRep != vRep) {
-
                 Arc arc = graph.get(i);
                 arc.getStart().getCandidatesList().add(arc.getEnd());
                 arc.getEnd().getCandidatesList().add(arc.getStart());
