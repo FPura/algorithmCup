@@ -10,11 +10,13 @@ public class WeightedGraph {
     private List<Arc> graph = new ArrayList<>();
     private Arc[][] graphMatrix;
     int bestKnown;
+    int[][] candidates;
 
     private List<Arc> mst = new ArrayList<>();
     private Map<City, City> parent = new LinkedHashMap<>();
 
-    public WeightedGraph(List<City> cities, Map<Integer, City> allCities, int bestKnown){
+    public WeightedGraph(List<City> cities, Map<Integer, City> allCities, int bestKnown, int[][] candidates){
+        this.candidates = candidates;
         this.bestKnown = bestKnown;
         this.allCities = allCities;
         this.cities = new ArrayList<>(cities);
@@ -60,16 +62,16 @@ public class WeightedGraph {
             vRep = findSet(graph.get(i).getEnd());
             if (uRep != vRep) {
                 Arc arc = graph.get(i);
-                arc.getStart().getCandidatesList().add(arc.getEnd());
+        /*        arc.getStart().getCandidatesList().add(arc.getEnd());
                 arc.getEnd().getCandidatesList().add(arc.getStart());
                 Arc sharedArc = graphMatrix[arc.getStart().getId() - 1][arc.getEnd().getId() - 1];
                 arc.getStart().getCandidateList().add(sharedArc);
-                arc.getEnd().getCandidateList().add(sharedArc);
+                arc.getEnd().getCandidateList().add(sharedArc);*/
                 mst.add(arc);
                 unionSet(uRep, vRep);
             }
         }
-        fillCandidateLists();
+    //    fillCandidateLists();
     }
 
     private City findSet(City city){
@@ -81,7 +83,7 @@ public class WeightedGraph {
     private void unionSet(City city1, City city2){
         parent.put(city1, parent.get(city2));
     }
-
+/*
     private void fillCandidateLists(){
         Arc arc;
         for(City city : cities) {
@@ -96,7 +98,7 @@ public class WeightedGraph {
             }
         }
     }
-
+*/
     public Arc[][] getGraphMatrix() {
         return graphMatrix;
     }
@@ -107,5 +109,9 @@ public class WeightedGraph {
 
     public int getBestKnown() {
         return bestKnown;
+    }
+
+    public int[][] getCandidates() {
+        return candidates;
     }
 }

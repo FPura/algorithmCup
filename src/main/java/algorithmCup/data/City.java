@@ -8,8 +8,8 @@ public class City {
     private double x;
     private double y;
     private Map<City, Integer> distances = new HashMap<>();
-    private List<Arc> candidateList = new ArrayList<>();
-    private List<City> candidatesList = new ArrayList<>();
+
+    private int[] closestNeighbours;
     private boolean visited = false;
 
     public City(int id, double x, double y) {
@@ -56,20 +56,12 @@ public class City {
         return 0;
     }
 
-    public List<Arc> getCandidateList() {
-        return candidateList;
+    public int[] getClosestNeighbours() {
+        return closestNeighbours;
     }
 
-    public void setCandidateList(List<Arc> candidateList) {
-        this.candidateList = candidateList;
-    }
-
-    public List<City> getCandidatesList() {
-        return candidatesList;
-    }
-
-    public void setCandidatesList(List<City> candidatesList) {
-        this.candidatesList = candidatesList;
+    public void setClosestNeighbours(int[] closestNeighbours) {
+        this.closestNeighbours = closestNeighbours;
     }
 
     @Override

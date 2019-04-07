@@ -20,6 +20,7 @@ public class Parser {
     private int best_known;
     private List<City> cities = new ArrayList<>();
     private List<Arc> arcs = new ArrayList<>();
+    private static final int CANDIDATE_SIZE = 10;
 
 
     public int getBest_known() {
@@ -65,6 +66,7 @@ public class Parser {
             i++;
         }
 
+        int[][] candidates = new int[cities.size()][CANDIDATE_SIZE];
 
         for(City city : cities){
             distances = new LinkedHashMap<>();
@@ -87,8 +89,22 @@ public class Parser {
                 temp.put(aa.getKey(), aa.getValue());
             }
             city.setDistances(temp);
+
+
+            int[] closestNeighbours = new int[cities.size()-1];
+            int count = 0;
+            for(City neighbour : temp.keySet()){
+                if(count < CANDIDATE_SIZE)
+                    candidates[city.getId()-1][count] = neighbour.getId()-1;
+
+                closestNeighbours[count] = neighbour.getId()-1;
+
+                count++;
+            }
+            city.setClosestNeighbours(closestNeighbours);
+
         }
-        WeightedGraph weightedGraph = new WeightedGraph(cities, allCities, best_known);
+        WeightedGraph weightedGraph = new WeightedGraph(cities, allCities, best_known, candidates);
         weightedGraph.addEdges(arcs);
         weightedGraph.kruskal();
         return weightedGraph;
