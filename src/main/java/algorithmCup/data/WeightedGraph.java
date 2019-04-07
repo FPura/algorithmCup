@@ -6,13 +6,17 @@ public class WeightedGraph {
 
     private static final int CANDIDATE_LIST_SIZE = 20;
     private List<City> cities;
+    private Map<Integer, City> allCities;
     private List<Arc> graph = new ArrayList<>();
     private Arc[][] graphMatrix;
+    int bestKnown;
 
     private List<Arc> mst = new ArrayList<>();
     private Map<City, City> parent = new LinkedHashMap<>();
 
-    public WeightedGraph(List<City> cities){
+    public WeightedGraph(List<City> cities, Map<Integer, City> allCities, int bestKnown){
+        this.bestKnown = bestKnown;
+        this.allCities = allCities;
         this.cities = new ArrayList<>(cities);
         this.graphMatrix = new Arc[cities.size()][cities.size()];
         int count=1;
@@ -25,6 +29,10 @@ public class WeightedGraph {
                 graphMatrix[cities.get(i).getId()-1][city.getId()-1] = arc;
             }
             count++;
+        }
+        Arc nullArc = new Arc(0);
+        for(int i=0; i<graphMatrix.length;i++){
+            graphMatrix[i][i] = nullArc;
         }
     }
 
@@ -87,5 +95,17 @@ public class WeightedGraph {
                 }
             }
         }
+    }
+
+    public Arc[][] getGraphMatrix() {
+        return graphMatrix;
+    }
+
+    public City getCity(int i){
+        return allCities.get(i);
+    }
+
+    public int getBestKnown() {
+        return bestKnown;
     }
 }

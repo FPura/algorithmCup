@@ -55,7 +55,7 @@ public class Graph extends Application {
                 Parser parser = new Parser();
                 WeightedGraph weightedGraph;
                 try {
-                    weightedGraph = parser.parse("C:\\Users\\Filippo\\Documents\\citta\\eil76.tsp");
+                    weightedGraph = parser.parse("C:\\Users\\Filippo\\Documents\\citta\\lin318.tsp");
 
                     NearestNeighbour nn = new NearestNeighbour(weightedGraph.getCities());
                     List<City> nnRoute = nn.computeRoute();
@@ -63,7 +63,7 @@ public class Graph extends Application {
                     int nnLength = Route.routeTotalLength(nnRoute, weightedGraph);
                     System.out.println("\nAfter NN: "+ nnLength);
 
-                    AntParams.τ0 = 1.0/(weightedGraph.getCities().size() * nnLength);
+                    AntParams.τ0 = 1.0/ (nnLength * weightedGraph.getCities().size());
                     int count=1;
                     for(int j = 0; j<weightedGraph.getCities().size(); j++){
                         for(int i = count; i<weightedGraph.getCities().size(); i++){
@@ -73,59 +73,20 @@ public class Graph extends Application {
                     }
 
                     Optimization opt = new AntColony();
-                    List<City> antRoute = opt.optimize(weightedGraph);
-                    System.out.println("\nAfter Ants: "+ Route.routeTotalLength(antRoute, weightedGraph));
+                    int[] antRoute = opt.optimize(weightedGraph);
                     series.getData().clear();
-                    for(City city : antRoute){
-                        series.getData().add(new XYChart.Data<>(city.getX(), city.getY()));
+                    for(int i=0; i<antRoute.length;i++){
+                        series.getData().add(new XYChart.Data<>(weightedGraph.getCity(antRoute[i]+1).getX(), weightedGraph.getCity(antRoute[i]+1).getY()));
                     }
 
+                    System.out.println("Route length: "+Route.routeTotalLength(antRoute,weightedGraph));
                     System.out.println(AntParams.ρ);
                     System.out.println(AntParams.ξ);
-/*
-                    series.getData().clear();
-                    for(City city : nnRoute){
-                        series.getData().add(new XYChart.Data<>(city.getX(), city.getY()));
-                    }
-                    ThreeOpt threeOpt = new ThreeOpt(nnRoute, weightedGraph);
-                    List<City> threeOptRoute = threeOpt.threeOptCompute();
 
-                    series.getData().clear();
-                    for(City city : threeOptRoute){
-                        series.getData().add(new XYChart.Data<>(city.getX(), city.getY()));
-                    }
-                    System.out.println("After 3-opt: "+Route.routeTotalLength(threeOptRoute));*/
-
-                    TwoOpt twoOpt = new TwoOpt(antRoute);
-                    List<City> twoOptRoute = twoOpt.twoOptCompute();
-
-                    series.getData().clear();
-                    for(City city : antRoute){
-                        series.getData().add(new XYChart.Data<>(city.getX(), city.getY()));
-                    }
-                    System.out.println("After 2-opt: "+Route.routeTotalLength(twoOptRoute));
                     System.out.println("Best Known: "+parser.getBest_known());
                 } catch (IOException ioe) {
                     ioe.printStackTrace();
                 }
-/*
-                List<City> denys_shit = new ArrayList<>();
-                Integer[] ints = {1, 16, 86, 106, 110, 72, 5, 7, 52, 31, 55, 69, 112, 20, 10, 3, 102, 57, 108, 64, 74, 13, 4, 121, 34, 126, 113, 50, 58, 119, 35, 118, 24, 36, 79, 92, 67, 130, 54, 30, 41, 124, 117, 18, 59, 78, 83, 27, 98, 44, 47, 87, 15, 25, 114, 60, 120, 75, 17, 129, 38, 68, 43, 111, 23, 91, 33, 90, 37, 22, 84, 89, 99, 8, 100, 9, 63, 81, 39, 109, 49, 70, 116, 97, 93, 73, 40, 88, 122, 46, 104, 32, 128, 123, 53, 115, 45, 96, 66, 71, 48, 77, 28, 61, 80, 56, 105, 6, 51, 12, 82, 11, 2, 94, 125, 76, 21, 103, 26, 19, 95, 42, 107, 14, 62, 85, 29, 101, 65, 127, 1};
-                for(int i : ints){
-                    for(City city : cities){
-                        if(city.getId() == i){
-                            denys_shit.add(city);
-                            break;
-                        }
-                    }
-                }
-                System.out.println(Route.routeTotalLength(denys_shit));
-                series.getData().clear();
-                for(City city : denys_shit){
-                    series.getData().add(new XYChart.Data<>(city.getX(), city.getY()));
-                }*/
-
-
 
             }
         });

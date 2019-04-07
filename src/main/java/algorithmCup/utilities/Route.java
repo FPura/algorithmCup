@@ -30,4 +30,13 @@ public class Route {
 
         return totalLength;
     }
+
+    public static int routeTotalLength(int[] route, WeightedGraph weightedGraph){
+        int totalLength = 0;
+        for(int i = 1; i<route.length; i++){
+            totalLength += weightedGraph.getArcBetween(weightedGraph.getCity(route[i-1]+1), weightedGraph.getCity(route[i]+1)).getLength();
+        }
+
+        return totalLength;
+    }
 }

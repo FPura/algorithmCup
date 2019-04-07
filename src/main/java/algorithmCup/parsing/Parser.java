@@ -48,6 +48,7 @@ public class Parser {
         List<Map.Entry<City, Integer>> list;
         HashMap<City, Integer> temp;
         Map<City, Integer> distances;
+        Map<Integer, City> allCities = new HashMap<>();
 
         while(!lines.get(i).contains("EOF")){
             str = lines.get(i).split("\\s+");
@@ -58,7 +59,9 @@ public class Parser {
             id = Integer.parseInt(str[0+safeCounter]);
             x = Double.parseDouble(str[1+safeCounter]);
             y = Double.parseDouble(str[2+safeCounter]);
-            cities.add(new City(id, x, y));
+            City newCity = new City(id, x, y);
+            cities.add(newCity);
+            allCities.put(id, newCity);
             i++;
         }
 
@@ -85,7 +88,7 @@ public class Parser {
             }
             city.setDistances(temp);
         }
-        WeightedGraph weightedGraph = new WeightedGraph(cities);
+        WeightedGraph weightedGraph = new WeightedGraph(cities, allCities, best_known);
         weightedGraph.addEdges(arcs);
         weightedGraph.kruskal();
         return weightedGraph;
