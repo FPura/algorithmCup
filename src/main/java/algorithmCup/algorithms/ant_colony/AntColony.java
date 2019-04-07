@@ -45,7 +45,7 @@ public class AntColony implements Optimization {
             for(Ant ant : ants){
 
                 cost = ant.getPathCost();
-                cost += twoOpt.twoOptCompute(ant.getPath());
+                cost += twoOpt.twoOptCompute(ant.getPath(), ant.getIdsIndexInPath());
                 ant.setPath(twoOpt.getLastTour());
 
                 averageCost += cost;

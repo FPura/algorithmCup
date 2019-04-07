@@ -20,7 +20,7 @@ public class Parser {
     private int best_known;
     private List<City> cities = new ArrayList<>();
     private List<Arc> arcs = new ArrayList<>();
-    private static final int CANDIDATE_SIZE = 10;
+    private static final int CANDIDATE_SIZE = 15;
 
 
     public int getBest_known() {

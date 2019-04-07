@@ -17,6 +17,7 @@ public class Ant {
     private int currentCityId;
     private int firstCityId;
     private int[] pathIds;
+    private int[] idsIndexInPath;
     private boolean[] isClosed;
     private int pathCost = 0;
 
@@ -31,7 +32,9 @@ public class Ant {
         candidatesLength = candidates[0].length;
         numberOfCities = graph.length;
         pathIds = new int[numberOfCities + 1];
+        idsIndexInPath = new int[numberOfCities];
         pathIds[0] = firstCityId;
+        idsIndexInPath[firstCityId] = 0;
         currentCityId = firstCityId;
         isClosed = new boolean[numberOfCities];
         isClosed[firstCityId] = true;
@@ -68,13 +71,13 @@ public class Ant {
 
 
         if(AntParams.RANDOM.nextDouble() <= AntParams.EXPLORATION_FACTOR) {
-            denominatorSum -= bestNominator;
+          //  denominatorSum -= bestNominator;
             //         Collections.shuffle(allowed);
             double rand = AntParams.RANDOM.nextDouble();
             //double probSum = 0;
             for (int i = 0; i < candidatesLength; i++) {
                 int currentCandidate = candidates[currentCityId][i];
-                if (!isClosed[currentCandidate] && currentCandidate != bestChoice) {
+                if (!isClosed[currentCandidate]/*&& currentCandidate != bestChoice*/) {
                     arc = graph[currentCityId][currentCandidate];
                     double probability = nominators[currentCandidate] /
                             denominatorSum;
@@ -82,6 +85,7 @@ public class Ant {
                     rand -= probability;
                     if (0 >= rand) {
                         pathIds[index] = currentCandidate;
+                        idsIndexInPath[currentCandidate] = index;
                         isClosed[currentCandidate] = true;
                         pathCost += arc.getLength();
                         currentCityId = currentCandidate;
@@ -94,6 +98,7 @@ public class Ant {
 
         arc = graph[currentCityId][bestChoice];
         pathIds[index] = bestChoice;
+        idsIndexInPath[bestChoice] = index;
         isClosed[bestChoice] = true;
         pathCost += arc.getLength();
         currentCityId = bestChoice;
@@ -109,6 +114,7 @@ public class Ant {
             if(!isClosed[neighbours[i]]){
                 arc = graph[currentCityId][neighbours[i]];
                 pathIds[index] = neighbours[i];
+                idsIndexInPath[neighbours[i]] = index;
                 isClosed[neighbours[i]] = true;
                 pathCost += arc.getLength();
                 currentCityId = neighbours[i];
@@ -117,6 +123,7 @@ public class Ant {
         }
         arc = graph[currentCityId][firstCityId];
         pathIds[index] = firstCityId;
+      //  idsIndexInPath[firstCityId] = index;
         pathCost += arc.getLength();
         return arc;
     }
@@ -132,5 +139,9 @@ public class Ant {
 
     public int getPathCost() {
         return pathCost;
+    }
+
+    public int[] getIdsIndexInPath() {
+        return idsIndexInPath;
     }
 }

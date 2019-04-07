@@ -29,7 +29,7 @@ class AntColonyTest {
             Parser parser = new Parser();
             WeightedGraph weightedGraph;
             try {
-                weightedGraph = parser.parse("C:\\Users\\Filippo\\Documents\\citta\\lin318.tsp");
+                weightedGraph = parser.parse("C:\\Users\\Filippo\\Documents\\citta\\ch130.tsp");
 
                 NearestNeighbour nn = new NearestNeighbour(weightedGraph.getCities());
                 List<City> nnRoute = nn.computeRoute();
