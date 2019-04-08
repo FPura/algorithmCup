@@ -1,29 +1,19 @@
 package algorithmCup.algorithms;
-
 import algorithmCup.data.Arc;
-import algorithmCup.data.City;
 import algorithmCup.data.WeightedGraph;
-import algorithmCup.utilities.Route;
-import org.apache.commons.lang3.ArrayUtils;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class TwoOpt {
 
-    private WeightedGraph weightedGraph;
     private Arc[][] graph;
     private int[] lastTour;
     int[][] candidates;
     int[] indexesInPath;
-    int candidatesLength;
+    int[] candidatesLength;
 
     public TwoOpt(WeightedGraph weightedGraph) {
-        this.weightedGraph = weightedGraph;
         graph = weightedGraph.getGraphMatrix();
         candidates = weightedGraph.getCandidates();
-        candidatesLength = candidates[0].length;
+        candidatesLength = weightedGraph.getCandidatesLength();
     }
 
     public int twoOptCompute(int[] route, int[] indexes){
@@ -38,33 +28,18 @@ public class TwoOpt {
             minChange = 0;
 
             for(int i = 1; i<route.length-2; i++){
-                for(int x=0; x<candidatesLength; x++){
-                   // int j =  ArrayUtils.indexOf(route, candidates[route[i]][x]);
+                for(int x=0; x<candidatesLength[route[i]]; x++) {
+                    // int j =  ArrayUtils.indexOf(route, candidates[route[i]][x]);
                     int j = indexesInPath[candidates[route[i]][x]];
-                    if(j > i){
-                        change = computeGain(route,i,j);
-                        if(change < minChange){
+                    if (j > i) {
+                        change = computeGain(route, i, j);
+                        if (change < minChange) {
                             minChange = change;
                             bestI = i;
                             bestJ = j;
                         }
                     }
-                }/*
-                if(minChange == 0) {
-                    int[] neighbours = weightedGraph.getCity(route[i]+1).getClosestNeighbours();
-                    for (int y=10; y<neighbours.length; y++) {
-                        int j =  ArrayUtils.indexOf(route, neighbours[y]);
-                        if(j > i){
-                            change = computeGain(route,i,j);
-                            if(change < minChange){
-                                minChange = change;
-                                bestI = i;
-                                bestJ = j;
-                                break;
-                            }
-                        }
-                    }
-                }*/
+                }
             }
             if(minChange < 0) {
                 route = twoOptSwap(route, bestI, bestJ);
@@ -76,45 +51,6 @@ public class TwoOpt {
         return totalChange;
     }
 
-
-/*
-    public List<City> twoOptCompute(){
-
-        int change;
-        int minChange;
-        int bestI = 0;
-        int bestJ = 0;
-        do{
-            minChange = 0;
-
-            for(int i = 1; i<route.size()-2; i++){
-                /*for(City candidate : route.get(i).getCandidatesList()){
-                    int j = route.indexOf(candidate);
-                    if(j > i) {
-                        change = computeGain(route, i, j);
-                        if (minChange > change) {
-                            minChange = change;
-                            bestI = i;
-                            bestJ = j;
-                        }
-                    }
-                }*/
-/*
-                for(int j = i+1; j<route.size()-1; j++){
-                    change = computeGain(route,i,j);
-                    if(minChange > change){
-                        minChange = change;
-                        bestI = i;
-                        bestJ = j;
-                    }
-                }
-            }
-            route = twoOptSwap(route, bestI, bestJ);
-        }while(minChange < 0);
-
-        return new ArrayList<>(route);
-    }
-*/
     private int[] twoOptSwap(int[] tour, int i, int j){
 
         int[] newTour = new int[tour.length];
@@ -144,50 +80,11 @@ public class TwoOpt {
                 graph[tour[i]][tour[i+1]].getLength() - graph[tour[j]][tour[j+1]].getLength();
     }
 
-    private List<City> twoOptSwap(List<City> tour, int i, int j){
-
-        List<City> newRoute = new ArrayList<>(tour.subList(0, i+1));
-        List<City> reverseSub = new ArrayList<>(tour.subList(i+1, j+1));
-        Collections.reverse(reverseSub);
-        List<City> restOfRoute = new ArrayList<>(tour.subList(j+1, tour.size()));
-        newRoute.addAll(reverseSub);
-        newRoute.addAll(restOfRoute);
-
-/*
-        List<City> newRoute = new ArrayList<>(route);
-
-        // 1. take route[0] to route[i-1] and add them in order to new_route
-        for (int c=0; c<=i-1; ++c) {
-            newRoute.set(c, tour.get(c));
-        }
-
-        // 2. take route[i] to route[k] and add them in reverse order to new_route
-        int dec = 0;
-        for (int c=i; c<=j; ++c) {
-            newRoute.set(c, tour.get(j-dec));
-            dec++;
-        }
-
-        // 3. take route[k+1] to end and add them in order to new_route
-        for (int c=j+1; c<tour.size(); ++c) {
-            newRoute.set(c, tour.get(c));
-        }
-        */
-        return newRoute;
-    }
-
-    private int computeGain(List<City> tour, int i, int j){
-
-        return tour.get(i).distanceTo(tour.get(j)) + tour.get(i+1).distanceTo(tour.get(j + 1))
-                - tour.get(i).distanceTo(tour.get(i+1)) - tour.get(j).distanceTo(tour.get(j + 1));
-
-    }
-
     public int[] getLastTour() {
         return lastTour;
     }
 
-
+/*
     public int[] denys2opt(int[] route){
         int bestLength = Route.routeTotalLength(route, weightedGraph);
         int routeSize = route.length;
@@ -238,5 +135,5 @@ public class TwoOpt {
         }
 
         return np;
-    }
+    }*/
 }

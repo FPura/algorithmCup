@@ -1,18 +1,14 @@
 package algorithmCup.algorithms.ant_colony;
-
-import algorithmCup.algorithms.Optimization;
 import algorithmCup.data.Arc;
-import algorithmCup.data.City;
 import algorithmCup.data.WeightedGraph;
 
-import java.util.*;
 
 public class Ant {
 
     private WeightedGraph weightedGraph;
     private Arc[][] graph;
     private int[][] candidates;
-    private int candidatesLength;
+    private int[] candidatesLength;
     private int numberOfCities;
     private int currentCityId;
     private int firstCityId;
@@ -23,14 +19,14 @@ public class Ant {
 
     public Ant(WeightedGraph weightedGraph){
         this.weightedGraph = weightedGraph;
+        graph = weightedGraph.getGraphMatrix();
+        candidates = weightedGraph.getCandidates();
+        candidatesLength = weightedGraph.getCandidatesLength();
+        numberOfCities = graph.length;
     }
 
     public void setStart(int firstCityId){
 
-        graph = weightedGraph.getGraphMatrix();
-        candidates = weightedGraph.getCandidates();
-        candidatesLength = candidates[0].length;
-        numberOfCities = graph.length;
         pathIds = new int[numberOfCities + 1];
         idsIndexInPath = new int[numberOfCities];
         pathIds[0] = firstCityId;
@@ -39,8 +35,6 @@ public class Ant {
         isClosed = new boolean[numberOfCities];
         isClosed[firstCityId] = true;
         this.firstCityId = firstCityId;
-
-
     }
     public Arc nextCity(int index){
 
@@ -51,7 +45,7 @@ public class Ant {
         int bestChoice = -1;
         Arc arc;
 
-        for(int i=0; i<candidatesLength; i++){
+        for(int i=0; i<candidatesLength[currentCityId]; i++){
             int currentCandidate = candidates[currentCityId][i];
             if(!isClosed[currentCandidate]){
                 arc = graph[currentCityId][currentCandidate];
@@ -71,11 +65,9 @@ public class Ant {
 
 
         if(AntParams.RANDOM.nextDouble() <= AntParams.EXPLORATION_FACTOR) {
-          //  denominatorSum -= bestNominator;
-            //         Collections.shuffle(allowed);
+            //denominatorSum -= bestNominator;
             double rand = AntParams.RANDOM.nextDouble();
-            //double probSum = 0;
-            for (int i = 0; i < candidatesLength; i++) {
+            for (int i = 0; i < candidatesLength[currentCityId]; i++) {
                 int currentCandidate = candidates[currentCityId][i];
                 if (!isClosed[currentCandidate]/*&& currentCandidate != bestChoice*/) {
                     arc = graph[currentCityId][currentCandidate];
@@ -95,7 +87,6 @@ public class Ant {
             }
             return fallback(index);
         }
-
         arc = graph[currentCityId][bestChoice];
         pathIds[index] = bestChoice;
         idsIndexInPath[bestChoice] = index;
@@ -103,14 +94,13 @@ public class Ant {
         pathCost += arc.getLength();
         currentCityId = bestChoice;
         return arc;
-
     }
 
 
     private Arc fallback(int index){
         Arc arc;
-        int[] neighbours = weightedGraph.getCity(currentCityId+1).getClosestNeighbours();
-        for(int i=0; i<neighbours.length; i++){
+        int[] neighbours = candidates[currentCityId];
+        for(int i=candidatesLength[currentCityId]; i<numberOfCities-1; i++){
             if(!isClosed[neighbours[i]]){
                 arc = graph[currentCityId][neighbours[i]];
                 pathIds[index] = neighbours[i];
@@ -123,7 +113,6 @@ public class Ant {
         }
         arc = graph[currentCityId][firstCityId];
         pathIds[index] = firstCityId;
-      //  idsIndexInPath[firstCityId] = index;
         pathCost += arc.getLength();
         return arc;
     }

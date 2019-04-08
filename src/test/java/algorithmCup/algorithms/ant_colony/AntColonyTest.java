@@ -21,6 +21,7 @@ class AntColonyTest {
     void optimize() {
 
 
+        //TODO: finish to find Params.
         for (; ; ) {
             long startTime = System.nanoTime();
             AntParams.RANDOM = new Random();

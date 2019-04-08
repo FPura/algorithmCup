@@ -49,7 +49,6 @@ public class Parser {
         List<Map.Entry<City, Integer>> list;
         HashMap<City, Integer> temp;
         Map<City, Integer> distances;
-        Map<Integer, City> allCities = new HashMap<>();
 
         while(!lines.get(i).contains("EOF")){
             str = lines.get(i).split("\\s+");
@@ -62,11 +61,11 @@ public class Parser {
             y = Double.parseDouble(str[2+safeCounter]);
             City newCity = new City(id, x, y);
             cities.add(newCity);
-            allCities.put(id, newCity);
             i++;
         }
 
-        int[][] candidates = new int[cities.size()][CANDIDATE_SIZE];
+        int[][] candidates = new int[cities.size()][cities.size()-1];
+        int[] candidatesLength = new int[cities.size()];
 
         for(City city : cities){
             distances = new LinkedHashMap<>();
@@ -91,22 +90,20 @@ public class Parser {
             city.setDistances(temp);
 
 
-            int[] closestNeighbours = new int[cities.size()-1];
+          //  int[] closestNeighbours = new int[cities.size()-1];
             int count = 0;
             for(City neighbour : temp.keySet()){
-                if(count < CANDIDATE_SIZE)
-                    candidates[city.getId()-1][count] = neighbour.getId()-1;
-
-                closestNeighbours[count] = neighbour.getId()-1;
-
+                candidates[city.getId()-1][count] = neighbour.getId()-1;
+                candidatesLength[city.getId()-1] = CANDIDATE_SIZE;
+             //   closestNeighbours[count] = neighbour.getId()-1;
                 count++;
             }
-            city.setClosestNeighbours(closestNeighbours);
+//            city.setClosestNeighbours(closestNeighbours);
 
         }
-        WeightedGraph weightedGraph = new WeightedGraph(cities, allCities, best_known, candidates);
-        weightedGraph.addEdges(arcs);
-        weightedGraph.kruskal();
+        WeightedGraph weightedGraph = new WeightedGraph(cities, best_known, candidates, candidatesLength);
+   //     weightedGraph.addEdges(arcs);
+  //      weightedGraph.kruskal();
         return weightedGraph;
     }
 

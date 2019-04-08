@@ -6,25 +6,29 @@ public class WeightedGraph {
 
     private static final int CANDIDATE_LIST_SIZE = 20;
     private List<City> cities;
-    private Map<Integer, City> allCities;
+    private Map<Integer, City> citiesById;
     private List<Arc> graph = new ArrayList<>();
     private Arc[][] graphMatrix;
     int bestKnown;
     int[][] candidates;
+    int[] candidatesLength;
 
     private List<Arc> mst = new ArrayList<>();
+
     private Map<City, City> parent = new LinkedHashMap<>();
 
-    public WeightedGraph(List<City> cities, Map<Integer, City> allCities, int bestKnown, int[][] candidates){
+    public WeightedGraph(List<City> cities, int bestKnown, int[][] candidates, int[] candidatesLength){
+        this.candidatesLength = candidatesLength;
         this.candidates = candidates;
         this.bestKnown = bestKnown;
-        this.allCities = allCities;
+        this.citiesById = new HashMap<>();
         this.cities = new ArrayList<>(cities);
         this.graphMatrix = new Arc[cities.size()][cities.size()];
         int count=1;
         Arc arc;
         for(City city : cities){
             this.parent.put(city, city);
+            this.citiesById.put(city.getId(), city);
             for(int i = count; i<cities.size(); i++){
                 arc = new Arc(city, cities.get(i));
                 graphMatrix[city.getId()-1][cities.get(i).getId()-1] = arc;
@@ -62,7 +66,7 @@ public class WeightedGraph {
             vRep = findSet(graph.get(i).getEnd());
             if (uRep != vRep) {
                 Arc arc = graph.get(i);
-        /*        arc.getStart().getCandidatesList().add(arc.getEnd());
+        /*      arc.getStart().getCandidatesList().add(arc.getEnd());
                 arc.getEnd().getCandidatesList().add(arc.getStart());
                 Arc sharedArc = graphMatrix[arc.getStart().getId() - 1][arc.getEnd().getId() - 1];
                 arc.getStart().getCandidateList().add(sharedArc);
@@ -104,7 +108,7 @@ public class WeightedGraph {
     }
 
     public City getCity(int i){
-        return allCities.get(i);
+        return citiesById.get(i);
     }
 
     public int getBestKnown() {
@@ -113,5 +117,8 @@ public class WeightedGraph {
 
     public int[][] getCandidates() {
         return candidates;
+    }
+    public int[] getCandidatesLength() {
+        return candidatesLength;
     }
 }

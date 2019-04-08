@@ -2,17 +2,13 @@ package algorithmCup;
 
 import algorithmCup.algorithms.NearestNeighbour;
 import algorithmCup.algorithms.Optimization;
-import algorithmCup.algorithms.ThreeOpt;
-import algorithmCup.algorithms.TwoOpt;
 import algorithmCup.algorithms.ant_colony.AntColony;
 import algorithmCup.algorithms.ant_colony.AntParams;
-import algorithmCup.data.Arc;
 import algorithmCup.data.City;
 import algorithmCup.data.WeightedGraph;
 import algorithmCup.parsing.Parser;
 import algorithmCup.utilities.Route;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -24,7 +20,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -55,7 +50,7 @@ public class Graph extends Application {
                 Parser parser = new Parser();
                 WeightedGraph weightedGraph;
                 try {
-                    weightedGraph = parser.parse("C:\\Users\\Filippo\\Documents\\citta\\lin318.tsp");
+                    weightedGraph = parser.parse("C:\\Users\\Filippo\\Documents\\citta\\rat783.tsp");
 
                     NearestNeighbour nn = new NearestNeighbour(weightedGraph.getCities());
                     List<City> nnRoute = nn.computeRoute();
