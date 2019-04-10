@@ -1,5 +1,6 @@
 package algorithmCup.algorithms.ant_colony;
 
+import algorithmCup.TimeElapsed;
 import algorithmCup.algorithms.Optimization;
 import algorithmCup.algorithms.TwoOpt;
 import algorithmCup.data.Arc;
@@ -20,10 +21,13 @@ public class AntColony implements Optimization {
         Ant bestAnt = null;
         Ant besterAnt = null;
         int besterCost = 0;
+        int staleCounter = 0;
         Arc arc;
         TwoOpt twoOpt = new TwoOpt(weightedGraph);
         for(int i = 0; i<AntParams.ITERATIONS; i++){
-            System.out.println("iteration " + i);
+            if(TimeElapsed.check())
+                break;
+          //  System.out.println("iteration " + i);
             ants.clear();
             for(int x = 0; x<AntParams.NUMBER_OF_ANTS; x++){
                 Ant ant = new Ant(weightedGraph);
@@ -56,9 +60,10 @@ public class AntColony implements Optimization {
                     bestCost = cost;
                     bestAnt = ant;
                 }
+
             }
 
-            System.out.println((int) averageCost/AntParams.NUMBER_OF_ANTS);
+            //System.out.println((int) averageCost/AntParams.NUMBER_OF_ANTS);
 
             if(besterCost == 0){
                 besterCost = bestCost;
@@ -67,17 +72,25 @@ public class AntColony implements Optimization {
             else if(bestCost < besterCost){
                 besterCost = bestCost;
                 besterAnt = bestAnt;
+                System.out.println(besterCost);
             }
 
-            System.out.println(besterCost);
             if(besterCost == weightedGraph.getBestKnown()){
                 return besterAnt.getPath();
             }
 
 
-            for (int x = 1; x < besterAnt.getPath().length; x++) {
-                arc = weightedGraph.getGraphMatrix()[besterAnt.getPath()[x-1]][besterAnt.getPath()[x]];
-                arc.setPheromone((1 - AntParams.ρ) * arc.getPheromone() + AntParams.ρ / besterCost );
+            if(AntParams.RANDOM.nextDouble() <= AntParams.LOCAL_GLOBAL_FACTOR) {
+                for (int x = 1; x < besterAnt.getPath().length; x++) {
+                    arc = weightedGraph.getGraphMatrix()[besterAnt.getPath()[x - 1]][besterAnt.getPath()[x]];
+                    arc.setPheromone((1 - AntParams.ρ) * arc.getPheromone() + AntParams.ρ / besterCost);
+                }
+            }
+            else {
+                for (int x = 1; x < bestAnt.getPath().length; x++) {
+                    arc = weightedGraph.getGraphMatrix()[bestAnt.getPath()[x - 1]][bestAnt.getPath()[x]];
+                    arc.setPheromone((1 - AntParams.ρ) * arc.getPheromone() + AntParams.ρ / besterCost);
+                }
             }
 
         }

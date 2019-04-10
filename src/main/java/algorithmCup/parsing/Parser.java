@@ -20,7 +20,7 @@ public class Parser {
     private int best_known;
     private List<City> cities = new ArrayList<>();
     private List<Arc> arcs = new ArrayList<>();
-    private static final int CANDIDATE_SIZE = 15;
+    private static final int CANDIDATE_SIZE = 30;
 
 
     public int getBest_known() {
@@ -64,8 +64,8 @@ public class Parser {
             i++;
         }
 
-        int[][] candidates = new int[cities.size()][cities.size()-1];
-        int[] candidatesLength = new int[cities.size()];
+       // int[][] candidates = new int[cities.size()][cities.size()-1];
+       // int[] candidatesLength = new int[cities.size()];
 
         for(City city : cities){
             distances = new LinkedHashMap<>();
@@ -91,20 +91,39 @@ public class Parser {
 
 
           //  int[] closestNeighbours = new int[cities.size()-1];
-            int count = 0;
-            for(City neighbour : temp.keySet()){
-                candidates[city.getId()-1][count] = neighbour.getId()-1;
-                candidatesLength[city.getId()-1] = CANDIDATE_SIZE;
+      //      int count = 0;
+        //    for(City neighbour : temp.keySet()){
+       //         candidates[city.getId()-1][count] = neighbour.getId()-1;
+        //        candidatesLength[city.getId()-1] = CANDIDATE_SIZE;
              //   closestNeighbours[count] = neighbour.getId()-1;
-                count++;
-            }
+         //       count++;
+        //    }
 //            city.setClosestNeighbours(closestNeighbours);
 
         }
-        WeightedGraph weightedGraph = new WeightedGraph(cities, best_known, candidates, candidatesLength);
-   //     weightedGraph.addEdges(arcs);
-  //      weightedGraph.kruskal();
+        WeightedGraph weightedGraph = new WeightedGraph(cities, best_known);
+        weightedGraph.addEdges(arcs);
+        weightedGraph.kruskal();
         return weightedGraph;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public int getDimension() {
+        return dimension;
+    }
+
+    public String getEdge_weight_type() {
+        return edge_weight_type;
+    }
 }

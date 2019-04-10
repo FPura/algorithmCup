@@ -4,7 +4,7 @@ import java.util.*;
 
 public class WeightedGraph {
 
-    private static final int CANDIDATE_LIST_SIZE = 20;
+    private static final int CANDIDATE_LIST_SIZE = 13;
     private List<City> cities;
     private Map<Integer, City> citiesById;
     private List<Arc> graph = new ArrayList<>();
@@ -17,9 +17,9 @@ public class WeightedGraph {
 
     private Map<City, City> parent = new LinkedHashMap<>();
 
-    public WeightedGraph(List<City> cities, int bestKnown, int[][] candidates, int[] candidatesLength){
-        this.candidatesLength = candidatesLength;
-        this.candidates = candidates;
+    public WeightedGraph(List<City> cities, int bestKnown/*, int[][] candidates, int[] candidatesLength*/){
+        this.candidatesLength = new int[cities.size()];
+        this.candidates = new int[cities.size()][cities.size()-1];
         this.bestKnown = bestKnown;
         this.citiesById = new HashMap<>();
         this.cities = new ArrayList<>(cities);
@@ -66,16 +66,18 @@ public class WeightedGraph {
             vRep = findSet(graph.get(i).getEnd());
             if (uRep != vRep) {
                 Arc arc = graph.get(i);
-        /*      arc.getStart().getCandidatesList().add(arc.getEnd());
-                arc.getEnd().getCandidatesList().add(arc.getStart());
-                Arc sharedArc = graphMatrix[arc.getStart().getId() - 1][arc.getEnd().getId() - 1];
+                arc.getStart().getCandidateList().add(arc.getEnd().getId()-1);
+                candidatesLength[arc.getStart().getId()-1] += 1;
+                arc.getEnd().getCandidateList().add(arc.getStart().getId()-1);
+                candidatesLength[arc.getEnd().getId()-1] += 1;
+               /* Arc sharedArc = graphMatrix[arc.getStart().getId() - 1][arc.getEnd().getId() - 1];
                 arc.getStart().getCandidateList().add(sharedArc);
                 arc.getEnd().getCandidateList().add(sharedArc);*/
                 mst.add(arc);
                 unionSet(uRep, vRep);
             }
         }
-    //    fillCandidateLists();
+        fillCandidateLists();
     }
 
     private City findSet(City city){
@@ -87,22 +89,27 @@ public class WeightedGraph {
     private void unionSet(City city1, City city2){
         parent.put(city1, parent.get(city2));
     }
-/*
+
     private void fillCandidateLists(){
         Arc arc;
+
         for(City city : cities) {
-            int candidateCount = city.getCandidatesList().size();
+            int index = 0;
+            LinkedHashSet<Integer> candidateList = city.getCandidateList();
+            for(Integer candidatiCityId : candidateList){
+                candidates[city.getId()-1][index] = candidatiCityId;
+                index++;
+            }
+            candidatesLength[city.getId()-1] += CANDIDATE_LIST_SIZE;
             for(City neighbour : city.getDistances().keySet()){
-                if(candidateCount >= CANDIDATE_LIST_SIZE)
-                    break;
-                if(!city.getCandidatesList().contains(neighbour)){
-                    city.getCandidatesList().add(neighbour);
-                    candidateCount++;
+                if(candidateList.add(neighbour.getId()-1)){
+                    candidates[city.getId()-1][index] = neighbour.getId()-1;
+                    index++;
                 }
             }
         }
     }
-*/
+
     public Arc[][] getGraphMatrix() {
         return graphMatrix;
     }

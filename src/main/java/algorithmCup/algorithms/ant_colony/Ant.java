@@ -49,7 +49,7 @@ public class Ant {
             int currentCandidate = candidates[currentCityId][i];
             if(!isClosed[currentCandidate]){
                 arc = graph[currentCityId][currentCandidate];
-                nominator = Math.pow(arc.getPheromone(), AntParams.ξ) * Math.pow(1.0 / arc.getLength(), AntParams.DISTANCE_INFLUENCE);
+                nominator = arc.getPheromone() * Math.pow(1.0 / arc.getLength(), AntParams.DISTANCE_INFLUENCE);
                 nominators[currentCandidate] = nominator;
                 denominatorSum += nominator;
                 if (nominator > bestNominator) {

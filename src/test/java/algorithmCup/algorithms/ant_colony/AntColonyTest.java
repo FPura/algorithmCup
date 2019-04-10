@@ -1,5 +1,6 @@
 package algorithmCup.algorithms.ant_colony;
 
+import algorithmCup.TimeElapsed;
 import algorithmCup.algorithms.NearestNeighbour;
 import algorithmCup.algorithms.Optimization;
 import algorithmCup.data.City;
@@ -23,14 +24,17 @@ class AntColonyTest {
 
         //TODO: finish to find Params.
         for (; ; ) {
-            long startTime = System.nanoTime();
             AntParams.RANDOM = new Random();
             AntParams.ρ = AntParams.RANDOM.nextDouble();
             AntParams.ξ = AntParams.RANDOM.nextDouble();
+            AntParams.NUMBER_OF_ANTS = AntParams.RANDOM.nextInt(2)+2;
+            AntParams.DISTANCE_INFLUENCE = AntParams.RANDOM.nextInt(12);
+            AntParams.EXPLORATION_FACTOR = AntParams.RANDOM.nextDouble() * 0.3;
             Parser parser = new Parser();
             WeightedGraph weightedGraph;
             try {
-                weightedGraph = parser.parse("C:\\Users\\Filippo\\Documents\\citta\\ch130.tsp");
+                TimeElapsed.start();
+                weightedGraph = parser.parse("C:\\Users\\Filippo\\Documents\\citta\\fl1577.tsp");
 
                 NearestNeighbour nn = new NearestNeighbour(weightedGraph.getCities());
                 List<City> nnRoute = nn.computeRoute();
@@ -53,13 +57,17 @@ class AntColonyTest {
                 System.out.println("Route length: " + Route.routeTotalLength(antRoute, weightedGraph));
                 System.out.println(AntParams.ρ);
                 System.out.println(AntParams.ξ);
+                System.out.println(AntParams.DISTANCE_INFLUENCE);
+                System.out.println(AntParams.EXPLORATION_FACTOR);
+                System.out.println(AntParams.NUMBER_OF_ANTS);
+                if(Route.routeTotalLength(antRoute, weightedGraph) < 100) {
+                    break;
+                }
 
                 System.out.println("Best Known: " + parser.getBest_known());
             } catch (IOException ioe) {
                 ioe.printStackTrace();
             }
-
-            long duration = System.nanoTime() - startTime;
 
         }
 

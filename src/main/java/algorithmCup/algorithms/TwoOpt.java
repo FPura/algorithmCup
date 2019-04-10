@@ -27,7 +27,8 @@ public class TwoOpt {
         do{
             minChange = 0;
 
-            for(int i = 1; i<route.length-2; i++){
+            //i=1
+            for(int i = 0; i<route.length-1; i++){
                 for(int x=0; x<candidatesLength[route[i]]; x++) {
                     // int j =  ArrayUtils.indexOf(route, candidates[route[i]][x]);
                     int j = indexesInPath[candidates[route[i]][x]];
@@ -42,6 +43,7 @@ public class TwoOpt {
                 }
             }
             if(minChange < 0) {
+        //        System.out.println(bestI + ", " + bestJ + ", " + minChange);
                 route = twoOptSwap(route, bestI, bestJ);
                 totalChange += minChange;
             }
@@ -54,7 +56,7 @@ public class TwoOpt {
     private int[] twoOptSwap(int[] tour, int i, int j){
 
         int[] newTour = new int[tour.length];
-        int[] newIndexes = new int[tour.length];
+        int[] newIndexes = new int[tour.length-1];
         for(int a=0; a<=i; a++){
             newTour[a] = tour[a];
             newIndexes[tour[a]] = a;
@@ -68,7 +70,8 @@ public class TwoOpt {
             newTour[a] = tour[a];
             newIndexes[tour[a]] = a;
         }
-        newTour[tour.length-1] = tour[tour.length-1];
+        //tour.length-1
+        newTour[tour.length-1] = tour[0];
 
         indexesInPath = newIndexes;
         return newTour;

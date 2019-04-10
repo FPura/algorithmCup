@@ -15,9 +15,6 @@ public class Main {
     public static Graph GRAPH = new Graph();
     public static void main(String [] args)
     {
-
         GRAPH.start(args);
-
-
     }
 }
