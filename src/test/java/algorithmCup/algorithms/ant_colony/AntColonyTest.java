@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Time;
 import java.util.List;
 import java.util.Random;
 
@@ -58,7 +59,7 @@ class AntColonyTest {
 
                 Optimization opt = new AntColony();
                 int[] antRoute = opt.optimize(weightedGraph);
-
+                long remainingTime = TimeElapsed.getRemainingTime();
                 System.out.println("Route length: " + Route.routeTotalLength(antRoute, weightedGraph));
                 System.out.println(AntParams.ρ);
                 System.out.println(AntParams.ξ);
@@ -70,6 +71,7 @@ class AntColonyTest {
                     File f = new File("C:\\Users\\Filippo\\Documents\\citta\\"+file+".seed");
                     FileWriter fw = new FileWriter(f);
 
+                    fw.write("remaining time (ms) : "+remainingTime+"\n");
                     fw.write("cost : "+bestbest+"\n");
                     fw.write("seed : "+AntParams.seed+"\n");
                     fw.write("ρ : "+AntParams.ρ+"\n");
