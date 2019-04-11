@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface Optimization {
     int[] optimize(WeightedGraph weightedGraph);
+    long getRemainingTime();
 }

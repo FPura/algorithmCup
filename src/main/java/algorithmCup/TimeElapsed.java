@@ -14,6 +14,6 @@ public class TimeElapsed {
     }
 
     public static long getRemainingTime(){
-        return System.currentTimeMillis()-start;
+        return start+ALLOWED-System.currentTimeMillis();
     }
 }

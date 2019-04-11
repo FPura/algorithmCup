@@ -24,23 +24,28 @@ class AntColonyTest {
     @Test
     void optimize() {
 
-
-        int bestbest = 10000000;
-        String file = "u1060";
+        String[] files = {"u1060","ch130","eil76","d198","fl1577","rat783","lin318","kroA100","pcb442","pr439"};
+        int[] bestbest = new int[files.length];
+        long[] bestTime = new long[files.length];
+        for(int i=0; i<files.length; i++){
+            bestbest[i] = 10000000;
+            bestTime[i] = 10000000;
+        }
+        int fileIndex = 0;
         //TODO: finish to find Params.
         for (;;) {
             AntParams.seed = new Random().nextInt(10000);
-            AntParams.ρ = 0.5;//new Random().nextDouble();
-            AntParams.ξ = 0.8;//new Random().nextDouble();
+            AntParams.ρ = new Random().nextDouble();
+            AntParams.ξ = new Random().nextDouble();
             //AntParams.NUMBER_OF_ANTS = AntParams.RANDOM.nextInt(2)+2;
-            AntParams.DISTANCE_INFLUENCE = 4;//new Random().nextInt(9);
-            AntParams.EXPLORATION_FACTOR = 0.2;// new Random().nextDouble() * 0.2;
+            AntParams.DISTANCE_INFLUENCE = new Random().nextInt(9);
+            AntParams.EXPLORATION_FACTOR = new Random().nextDouble() * 0.3;
             AntParams.RANDOM = new Random(AntParams.seed);
             Parser parser = new Parser();
             WeightedGraph weightedGraph;
             try {
                 TimeElapsed.start();
-                weightedGraph = parser.parse("C:\\Users\\Filippo\\Documents\\citta\\"+file+".tsp");
+                weightedGraph = parser.parse("C:\\Users\\Filippo Pura\\Documents\\citta\\"+files[fileIndex]+".tsp");
 
                 NearestNeighbour nn = new NearestNeighbour(weightedGraph.getCities());
                 List<City> nnRoute = nn.computeRoute();
@@ -59,20 +64,22 @@ class AntColonyTest {
 
                 Optimization opt = new AntColony();
                 int[] antRoute = opt.optimize(weightedGraph);
-                long remainingTime = TimeElapsed.getRemainingTime();
-                System.out.println("Route length: " + Route.routeTotalLength(antRoute, weightedGraph));
+                long remainingTime = opt.getRemainingTime();
+                int routeLength = Route.routeTotalLength(antRoute, weightedGraph);
+                System.out.println("Route length: " + routeLength);
                 System.out.println(AntParams.ρ);
                 System.out.println(AntParams.ξ);
                 System.out.println(AntParams.DISTANCE_INFLUENCE);
                 System.out.println(AntParams.EXPLORATION_FACTOR);
                 System.out.println(AntParams.NUMBER_OF_ANTS);
-                if(Route.routeTotalLength(antRoute, weightedGraph) < bestbest) {
-                    bestbest = Route.routeTotalLength(antRoute, weightedGraph);
-                    File f = new File("C:\\Users\\Filippo\\Documents\\citta\\"+file+".seed");
+                if(routeLength < bestbest[fileIndex] || (routeLength == bestbest[fileIndex] && remainingTime > bestTime[fileIndex])) {
+                    bestbest[fileIndex] = routeLength;
+                    bestTime[fileIndex] = remainingTime;
+                    File f = new File("C:\\Users\\Filippo Pura\\Documents\\citta\\"+files[fileIndex]+".seed");
                     FileWriter fw = new FileWriter(f);
 
-                    fw.write("remaining time (ms) : "+remainingTime+"\n");
-                    fw.write("cost : "+bestbest+"\n");
+                    fw.write("remaining time (ms) : "+bestTime[fileIndex]+"\n");
+                    fw.write("cost : "+bestbest[fileIndex]+"\n");
                     fw.write("seed : "+AntParams.seed+"\n");
                     fw.write("ρ : "+AntParams.ρ+"\n");
                     fw.write("ξ : "+AntParams.ξ+"\n");
@@ -87,6 +94,11 @@ class AntColonyTest {
                 System.out.println("Best Known: " + parser.getBest_known());
             } catch (IOException ioe) {
                 ioe.printStackTrace();
+            }
+
+            fileIndex++;
+            if(fileIndex >= 10){
+                fileIndex = 0;
             }
 
         }

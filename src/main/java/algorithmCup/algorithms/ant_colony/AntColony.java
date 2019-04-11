@@ -12,6 +12,7 @@ import java.util.List;
 
 public class AntColony implements Optimization {
 
+    private long remainingTime;
     @Override
     public int[] optimize(WeightedGraph weightedGraph){
 
@@ -73,7 +74,7 @@ public class AntColony implements Optimization {
                 besterCost = bestCost;
                 besterAnt = bestAnt;
                 System.out.println(besterCost);
-                staleCounter = 0;
+                remainingTime = TimeElapsed.getRemainingTime();
                // AntParams.EXPLORATION_FACTOR = 0.05;
             }
 
@@ -89,22 +90,27 @@ public class AntColony implements Optimization {
           //  }
 
 
-            if(AntParams.RANDOM.nextDouble() <= AntParams.LOCAL_GLOBAL_FACTOR) {
+         //   if(AntParams.RANDOM.nextDouble() <= AntParams.LOCAL_GLOBAL_FACTOR) {
                 for (int x = 1; x < besterAnt.getPath().length; x++) {
                     arc = weightedGraph.getGraphMatrix()[besterAnt.getPath()[x - 1]][besterAnt.getPath()[x]];
                     arc.setPheromone((1 - AntParams.ρ) * arc.getPheromone() + AntParams.ρ / besterCost);
                 }
-            }
-            else {
+         //  }
+        /*    else {
                 for (int x = 1; x < bestAnt.getPath().length; x++) {
                     arc = weightedGraph.getGraphMatrix()[bestAnt.getPath()[x - 1]][bestAnt.getPath()[x]];
                     arc.setPheromone((1 - AntParams.ρ) * arc.getPheromone() + AntParams.ρ / besterCost);
                 }
-            }
+            }*/
 
         }
 
         return besterAnt.getPath();
 
+    }
+
+    @Override
+    public long getRemainingTime(){
+        return remainingTime;
     }
 }
