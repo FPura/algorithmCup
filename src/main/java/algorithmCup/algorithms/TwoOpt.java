@@ -32,14 +32,13 @@ public class TwoOpt {
                 for(int x=0; x<candidatesLength[route[i]]; x++) {
                     // int j =  ArrayUtils.indexOf(route, candidates[route[i]][x]);
                     int j = indexesInPath[candidates[route[i]][x]];
-                    if (j > i) {
-                        change = computeGain(route, i, j);
-                        if (change < minChange) {
-                            minChange = change;
-                            bestI = i;
-                            bestJ = j;
-                        }
+                    change = computeGain(route, i, j);
+                    if (change < minChange) {
+                        minChange = change;
+                        bestI = i;
+                        bestJ = j;
                     }
+
                 }
             }
             if(minChange < 0) {
@@ -57,24 +56,45 @@ public class TwoOpt {
 
         int[] newTour = new int[tour.length];
         int[] newIndexes = new int[tour.length-1];
-        for(int a=0; a<=i; a++){
-            newTour[a] = tour[a];
-            newIndexes[tour[a]] = a;
-        }
-        for(int a=i+1; a<=j; a++){
-            newTour[a] = tour[j+(i+1)-a];
-            newIndexes[tour[j+(i+1)-a]] = a;
 
+        if(j > i) {
+            for (int a = 0; a <= i; a++) {
+                newTour[a] = tour[a];
+                newIndexes[tour[a]] = a;
+            }
+            for (int a = i + 1; a <= j; a++) {
+                newTour[a] = tour[j + (i + 1) - a];
+                newIndexes[tour[j + (i + 1) - a]] = a;
+
+            }
+            for (int a = j + 1; a < tour.length - 1; a++) {
+                newTour[a] = tour[a];
+                newIndexes[tour[a]] = a;
+            }
+            //tour.length-1
+            newTour[tour.length - 1] = newTour[0];
         }
-        for(int a=j+1; a<tour.length-1; a++){
-            newTour[a] = tour[a];
-            newIndexes[tour[a]] = a;
+        else{
+            newTour[0] = tour[i];
+            newIndexes[tour[i]] = 0;
+            int index = 1;
+            for (int a = j; a != i; a = Math.floorMod(a-1, tour.length-1)) {
+                newTour[index] = tour[a];
+                newIndexes[tour[a]] = index;
+                index++;
+            }
+            for (int a = j + 1; a < i; a++) {
+                newTour[index] = tour[a];
+                newIndexes[tour[a]] = index;
+                index++;
+            }
+            //tour.length-1
+            newTour[tour.length - 1] = newTour[0];
         }
-        //tour.length-1
-        newTour[tour.length-1] = tour[0];
 
         indexesInPath = newIndexes;
         return newTour;
+
     }
 
     private int computeGain(int[] tour, int i, int j){

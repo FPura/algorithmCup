@@ -73,11 +73,20 @@ public class AntColony implements Optimization {
                 besterCost = bestCost;
                 besterAnt = bestAnt;
                 System.out.println(besterCost);
+                staleCounter = 0;
+               // AntParams.EXPLORATION_FACTOR = 0.05;
             }
+
+           // staleCounter++;
 
             if(besterCost == weightedGraph.getBestKnown()){
                 return besterAnt.getPath();
             }
+          //  if(staleCounter == 20){
+          //      System.out.println("stale");
+          //      staleCounter = 0;
+          //      AntParams.EXPLORATION_FACTOR += 0.01;
+          //  }
 
 
             if(AntParams.RANDOM.nextDouble() <= AntParams.LOCAL_GLOBAL_FACTOR) {

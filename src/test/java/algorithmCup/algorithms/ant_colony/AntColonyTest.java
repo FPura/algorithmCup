@@ -10,6 +10,8 @@ import algorithmCup.utilities.Route;
 import javafx.scene.chart.XYChart;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
@@ -22,19 +24,22 @@ class AntColonyTest {
     void optimize() {
 
 
+        int bestbest = 10000000;
+        String file = "u1060";
         //TODO: finish to find Params.
-        for (; ; ) {
-            AntParams.RANDOM = new Random();
-            AntParams.ρ = AntParams.RANDOM.nextDouble();
-            AntParams.ξ = AntParams.RANDOM.nextDouble();
-            AntParams.NUMBER_OF_ANTS = AntParams.RANDOM.nextInt(2)+2;
-            AntParams.DISTANCE_INFLUENCE = AntParams.RANDOM.nextInt(12);
-            AntParams.EXPLORATION_FACTOR = AntParams.RANDOM.nextDouble() * 0.3;
+        for (;;) {
+            AntParams.seed = new Random().nextInt(10000);
+            AntParams.ρ = 0.5;//new Random().nextDouble();
+            AntParams.ξ = 0.8;//new Random().nextDouble();
+            //AntParams.NUMBER_OF_ANTS = AntParams.RANDOM.nextInt(2)+2;
+            AntParams.DISTANCE_INFLUENCE = 4;//new Random().nextInt(9);
+            AntParams.EXPLORATION_FACTOR = 0.2;// new Random().nextDouble() * 0.2;
+            AntParams.RANDOM = new Random(AntParams.seed);
             Parser parser = new Parser();
             WeightedGraph weightedGraph;
             try {
                 TimeElapsed.start();
-                weightedGraph = parser.parse("C:\\Users\\Filippo\\Documents\\citta\\fl1577.tsp");
+                weightedGraph = parser.parse("C:\\Users\\Filippo\\Documents\\citta\\"+file+".tsp");
 
                 NearestNeighbour nn = new NearestNeighbour(weightedGraph.getCities());
                 List<City> nnRoute = nn.computeRoute();
@@ -60,8 +65,21 @@ class AntColonyTest {
                 System.out.println(AntParams.DISTANCE_INFLUENCE);
                 System.out.println(AntParams.EXPLORATION_FACTOR);
                 System.out.println(AntParams.NUMBER_OF_ANTS);
-                if(Route.routeTotalLength(antRoute, weightedGraph) < 100) {
-                    break;
+                if(Route.routeTotalLength(antRoute, weightedGraph) < bestbest) {
+                    bestbest = Route.routeTotalLength(antRoute, weightedGraph);
+                    File f = new File("C:\\Users\\Filippo\\Documents\\citta\\"+file+".seed");
+                    FileWriter fw = new FileWriter(f);
+
+                    fw.write("cost : "+bestbest+"\n");
+                    fw.write("seed : "+AntParams.seed+"\n");
+                    fw.write("ρ : "+AntParams.ρ+"\n");
+                    fw.write("ξ : "+AntParams.ξ+"\n");
+                    fw.write("Distance influence : "+AntParams.DISTANCE_INFLUENCE+"\n");
+                    fw.write("Exploration factor : "+AntParams.EXPLORATION_FACTOR+"\n");
+                    fw.write("Number of ants : "+AntParams.NUMBER_OF_ANTS+"\n");
+
+                    fw.write("EOF\n");
+                    fw.close();
                 }
 
                 System.out.println("Best Known: " + parser.getBest_known());

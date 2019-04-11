@@ -66,7 +66,7 @@ public class Ant {
 
         if(AntParams.RANDOM.nextDouble() <= AntParams.EXPLORATION_FACTOR) {
             //denominatorSum -= bestNominator;
-            double rand = AntParams.RANDOM.nextDouble();
+            double rand = AntParams.RANDOM.nextDouble()-0.001;
             for (int i = 0; i < candidatesLength[currentCityId]; i++) {
                 int currentCandidate = candidates[currentCityId][i];
                 if (!isClosed[currentCandidate]/*&& currentCandidate != bestChoice*/) {
