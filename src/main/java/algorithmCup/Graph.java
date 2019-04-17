@@ -58,8 +58,8 @@ public class Graph extends Application {
                 WeightedGraph weightedGraph;
                 try {
                     TimeElapsed.start();
-                    String file = "u1060";
-                    weightedGraph = parser.parse("C:\\Users\\Filippo Pura\\Documents\\citta\\"+file+".tsp");
+                    String file = "fl1577";
+                    weightedGraph = parser.parse("C:\\Users\\Filippo\\Documents\\citta\\"+file+".tsp");
 
                     NearestNeighbour nn = new NearestNeighbour(weightedGraph.getCities());
                     List<City> nnRoute = nn.computeRoute();
@@ -78,10 +78,13 @@ public class Graph extends Application {
 
                     Optimization opt = new AntColony();
                     int[] antRoute = opt.optimize(weightedGraph);
+                    long remainingTime = opt.getRemainingTime();
                     series.getData().clear();
                     for(int i=0; i<antRoute.length;i++){
                         series.getData().add(new XYChart.Data<>(weightedGraph.getCity(antRoute[i]+1).getX(), weightedGraph.getCity(antRoute[i]+1).getY()));
                     }
+
+                    System.out.println("Remaining time: "+ remainingTime);
 
                     System.out.println("Route length: "+Route.routeTotalLength(antRoute,weightedGraph));
                     System.out.println(AntParams.ρ);
@@ -90,7 +93,7 @@ public class Graph extends Application {
                     System.out.println(AntParams.EXPLORATION_FACTOR);
                     System.out.println("Best Known: "+parser.getBest_known());
 
-                    File f = new File("C:\\Users\\Filippo Pura\\Documents\\citta\\"+file+".opt.tour");
+                    File f = new File("C:\\Users\\Filippo\\Documents\\citta\\"+file+".opt.tour");
                     FileWriter fw = new FileWriter(f);
 
                     fw.write("NAME : " + parser.getName() + "\n");
