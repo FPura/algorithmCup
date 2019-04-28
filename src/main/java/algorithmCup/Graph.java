@@ -1,4 +1,4 @@
-package algorithmCup;
+/*package algorithmCup;
 
 import algorithmCup.algorithms.NearestNeighbour;
 import algorithmCup.algorithms.Optimization;
@@ -48,12 +48,6 @@ public class Graph extends Application {
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
 
-
-             //   AntParams.RANDOM = new Random();
-           //     AntParams.ρ = AntParams.RANDOM.nextDouble();
-            //    AntParams.ξ = AntParams.RANDOM.nextDouble();
-            //    AntParams.DISTANCE_INFLUENCE = AntParams.RANDOM.nextInt(8);
-             //   AntParams.EXPLORATION_FACTOR = AntParams.RANDOM.nextDouble() * 0.2;
                 Parser parser = new Parser();
                 WeightedGraph weightedGraph;
                 try {
@@ -149,4 +143,4 @@ public class Graph extends Application {
     public void start(String[] args) {
         launch(args);
     }
-}
+}*/

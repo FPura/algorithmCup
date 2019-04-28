@@ -1,6 +1,5 @@
 package algorithmCup.utilities;
 
-import algorithmCup.Graph;
 import algorithmCup.Main;
 import algorithmCup.data.City;
 import algorithmCup.data.WeightedGraph;

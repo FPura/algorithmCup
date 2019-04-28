@@ -8,8 +8,6 @@ public class Arc {
     private City end;
     private int length;
     private double pheromone;
-    private double probability;
-
 
     public Arc(int length) {
         this.length = length;
@@ -36,13 +34,5 @@ public class Arc {
     }
     public void setPheromone(double pheromone){
         this.pheromone = pheromone;
-    }
-
-    public double getProbability() {
-        return probability;
-    }
-
-    public void setProbability(double probability) {
-        this.probability = probability;
     }
 }

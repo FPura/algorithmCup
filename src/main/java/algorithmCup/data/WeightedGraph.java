@@ -4,7 +4,7 @@ import java.util.*;
 
 public class WeightedGraph {
 
-    private static final int CANDIDATE_LIST_SIZE = 13;
+    public static int CANDIDATE_LIST_SIZE = 13;
     private List<City> cities;
     private Map<Integer, City> citiesById;
     private List<Arc> graph = new ArrayList<>();
@@ -70,9 +70,6 @@ public class WeightedGraph {
                 candidatesLength[arc.getStart().getId()-1] += 1;
                 arc.getEnd().getCandidateList().add(arc.getStart().getId()-1);
                 candidatesLength[arc.getEnd().getId()-1] += 1;
-               /* Arc sharedArc = graphMatrix[arc.getStart().getId() - 1][arc.getEnd().getId() - 1];
-                arc.getStart().getCandidateList().add(sharedArc);
-                arc.getEnd().getCandidateList().add(sharedArc);*/
                 mst.add(arc);
                 unionSet(uRep, vRep);
             }
@@ -91,7 +88,6 @@ public class WeightedGraph {
     }
 
     private void fillCandidateLists(){
-        Arc arc;
 
         for(City city : cities) {
             int index = 0;

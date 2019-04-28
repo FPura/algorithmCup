@@ -1,10 +1,12 @@
 package algorithmCup.parsing;
 
+import algorithmCup.algorithms.ant_colony.AntParams;
 import algorithmCup.data.Arc;
 import algorithmCup.data.City;
 import algorithmCup.data.WeightedGraph;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
@@ -20,7 +22,6 @@ public class Parser {
     private int best_known;
     private List<City> cities = new ArrayList<>();
     private List<Arc> arcs = new ArrayList<>();
-    private static final int CANDIDATE_SIZE = 30;
 
 
     public int getBest_known() {
@@ -64,9 +65,6 @@ public class Parser {
             i++;
         }
 
-       // int[][] candidates = new int[cities.size()][cities.size()-1];
-       // int[] candidatesLength = new int[cities.size()];
-
         for(City city : cities){
             distances = new LinkedHashMap<>();
 
@@ -89,22 +87,24 @@ public class Parser {
             }
             city.setDistances(temp);
 
-
-          //  int[] closestNeighbours = new int[cities.size()-1];
-      //      int count = 0;
-        //    for(City neighbour : temp.keySet()){
-       //         candidates[city.getId()-1][count] = neighbour.getId()-1;
-        //        candidatesLength[city.getId()-1] = CANDIDATE_SIZE;
-             //   closestNeighbours[count] = neighbour.getId()-1;
-         //       count++;
-        //    }
-//            city.setClosestNeighbours(closestNeighbours);
-
         }
         WeightedGraph weightedGraph = new WeightedGraph(cities, best_known);
         weightedGraph.addEdges(arcs);
         weightedGraph.kruskal();
         return weightedGraph;
+    }
+
+    public void parseSeed(String path) throws FileNotFoundException {
+        BufferedReader areader = new BufferedReader(new FileReader(path));
+        List<String> lines = areader.lines().collect(Collectors.toList());
+        AntParams.seed = Integer.parseInt(lines.get(2).split("\\s*:\\s*")[1]);
+        AntParams.ρ = Double.parseDouble(lines.get(3).split("\\s*:\\s*")[1]);
+        AntParams.ξ = Double.parseDouble(lines.get(4).split("\\s*:\\s*")[1]);
+        AntParams.DISTANCE_INFLUENCE = Double.parseDouble(lines.get(5).split("\\s*:\\s*")[1]);
+        AntParams.EXPLORATION_FACTOR = Double.parseDouble(lines.get(6).split("\\s*:\\s*")[1]);
+        AntParams.NUMBER_OF_ANTS = Integer.parseInt(lines.get(7).split("\\s*:\\s*")[1]);
+        WeightedGraph.CANDIDATE_LIST_SIZE = Integer.parseInt(lines.get(8).split("\\s*:\\s*")[1]);
+        AntParams.RANDOM = new Random(AntParams.seed);
     }
 
     public String getName() {

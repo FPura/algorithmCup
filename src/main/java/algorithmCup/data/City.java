@@ -9,7 +9,6 @@ public class City {
     private double y;
     private Map<City, Integer> distances = new HashMap<>();
     private LinkedHashSet<Integer> candidateList = new LinkedHashSet<>();
-    private int[] closestNeighbours;
     private boolean visited = false;
 
     public City(int id, double x, double y) {
@@ -54,14 +53,6 @@ public class City {
         if(distances.containsKey(city))
             return distances.get(city);
         return 0;
-    }
-
-    public int[] getClosestNeighbours() {
-        return closestNeighbours;
-    }
-
-    public void setClosestNeighbours(int[] closestNeighbours) {
-        this.closestNeighbours = closestNeighbours;
     }
 
     public LinkedHashSet<Integer> getCandidateList() {
