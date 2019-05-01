@@ -3,7 +3,7 @@ package algorithmCup;
 public class TimeElapsed {
 
     private static long start;
-    private final static long ALLOWED = 180000;
+    private final static long ALLOWED = 175000;
 
     public static void start(){
         start = System.currentTimeMillis();

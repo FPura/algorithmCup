@@ -2,22 +2,18 @@ package algorithmCup.algorithms.ant_colony;
 
 import algorithmCup.TimeElapsed;
 import algorithmCup.algorithms.NearestNeighbour;
-import algorithmCup.algorithms.Optimization;
+import algorithmCup.algorithms.MetaHeuristic;
 import algorithmCup.data.City;
 import algorithmCup.data.WeightedGraph;
 import algorithmCup.parsing.Parser;
 import algorithmCup.utilities.Route;
-import javafx.scene.chart.XYChart;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Time;
 import java.util.List;
 import java.util.Random;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class AntColonyTest {
 
@@ -44,7 +40,7 @@ class AntColonyTest {
                 count++;
             }
 
-            Optimization opt = new AntColony();
+            MetaHeuristic opt = new AntColony();
             int[] antRoute = opt.optimize(weightedGraph);
             long remainingTime = opt.getRemainingTime();
 
@@ -92,20 +88,20 @@ class AntColonyTest {
            // AntParams.seed = new Random().nextInt(100000);
             AntParams.ρ = new Random().nextDouble();
             AntParams.ξ = new Random().nextDouble();
-           // AntParams.NUMBER_OF_ANTS = 2;
-          //  WeightedGraph.CANDIDATE_LIST_SIZE = new Random().nextInt(15)+18;
-            AntParams.DISTANCE_INFLUENCE = 8.0;//new Random().nextInt(9)+1;
-            AntParams.EXPLORATION_FACTOR = 0.2;//new Random().nextDouble() * 0.4;
+            AntParams.NUMBER_OF_ANTS = new Random().nextInt(3)+2;
+            WeightedGraph.CANDIDATE_LIST_SIZE = new Random().nextInt(30)+13;
+            AntParams.DISTANCE_INFLUENCE = new Random().nextInt(9)+1;
+            AntParams.EXPLORATION_FACTOR = new Random().nextDouble() * 0.4;
          //   AntParams.RANDOM = new Random(AntParams.seed);
             Parser parser = new Parser();
             WeightedGraph weightedGraph;
             try {
                 TimeElapsed.start();
                // parser.parseSeed("C:\\Users\\Filippo\\Documents\\final\\"+files[fileIndex]+"\\"+files[fileIndex]+".seed");
-                WeightedGraph.CANDIDATE_LIST_SIZE = 30;
+           //     WeightedGraph.CANDIDATE_LIST_SIZE = 30;
                 weightedGraph = parser.parse("C:\\Users\\Filippo\\Documents\\final\\"+files[fileIndex]+"\\"+files[fileIndex]+".tsp");
         //        AntParams.EXPLORATION_FACTOR = 0.35;
-                AntParams.NUMBER_OF_ANTS = 5;
+           //     AntParams.NUMBER_OF_ANTS = 5;
                 AntParams.seed = new Random().nextInt(100000);
                 AntParams.RANDOM = new Random(AntParams.seed);
                 NearestNeighbour nn = new NearestNeighbour(weightedGraph.getCities());
@@ -123,7 +119,7 @@ class AntColonyTest {
                     count++;
                 }
 
-                Optimization opt = new AntColony();
+                MetaHeuristic opt = new AntColony();
                 int[] antRoute = opt.optimize(weightedGraph);
                 long remainingTime = opt.getRemainingTime();
                 int routeLength = Route.routeTotalLength(antRoute, weightedGraph);

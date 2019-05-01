@@ -1,7 +1,7 @@
 package algorithmCup.algorithms.ant_colony;
 
 import algorithmCup.TimeElapsed;
-import algorithmCup.algorithms.Optimization;
+import algorithmCup.algorithms.MetaHeuristic;
 import algorithmCup.algorithms.TwoOpt;
 import algorithmCup.data.Arc;
 import algorithmCup.data.City;
@@ -10,7 +10,7 @@ import algorithmCup.data.WeightedGraph;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AntColony implements Optimization {
+public class AntColony implements MetaHeuristic {
 
     private long remainingTime;
     @Override

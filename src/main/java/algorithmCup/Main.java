@@ -1,7 +1,7 @@
 package algorithmCup;
 
 import algorithmCup.algorithms.NearestNeighbour;
-import algorithmCup.algorithms.Optimization;
+import algorithmCup.algorithms.MetaHeuristic;
 import algorithmCup.algorithms.ant_colony.AntColony;
 import algorithmCup.algorithms.ant_colony.AntParams;
 import algorithmCup.data.City;
@@ -21,6 +21,8 @@ public class Main {
     public static void main(String [] args)
     {
 
+        TimeElapsed.start();
+
         if(args.length < 3){
             System.out.println("Insufficent arguments, correct usage: <seed path>, <tsp file path>, <path where to save the tour>");
             exit(1);
@@ -30,21 +32,14 @@ public class Main {
             exit(1);
         }
 
-        TimeElapsed.start();
-
         try {
             Parser parser = new Parser();
-            //String file = "rat783";
             parser.parseSeed(args[0]);
             WeightedGraph weightedGraph = parser.parse(args[1]);
-            //parser.parseSeed("C:\\Users\\Filippo\\Documents\\final\\"+file+"\\"+file+".seed");
-            //weightedGraph = parser.parse("C:\\Users\\Filippo\\Documents\\final\\"+file+"\\"+file+".tsp");
-
             NearestNeighbour nn = new NearestNeighbour(weightedGraph.getCities());
             List<City> nnRoute = nn.computeRoute();
             int nnLength = Route.routeTotalLength(nnRoute, weightedGraph);
             System.out.println("\nAfter NN: "+ nnLength);
-
             AntParams.τ0 = 1.0/ (nnLength * weightedGraph.getCities().size());
             int count=1;
             for(int j = 0; j<weightedGraph.getCities().size(); j++){
@@ -53,23 +48,13 @@ public class Main {
                 }
                 count++;
             }
-
-            Optimization opt = new AntColony();
+            MetaHeuristic opt = new AntColony();
             int[] antRoute = opt.optimize(weightedGraph);
             long remainingTime = opt.getRemainingTime();
-
             System.out.println("Remaining time after last change: "+ remainingTime);
-
             System.out.println("Route length: "+Route.routeTotalLength(antRoute,weightedGraph));
-          /*  System.out.println(AntParams.ρ);
-            System.out.println(AntParams.ξ);
-            System.out.println(AntParams.DISTANCE_INFLUENCE);
-            System.out.println(AntParams.EXPLORATION_FACTOR);
-            System.out.println(WeightedGraph.CANDIDATE_LIST_SIZE);*/
             System.out.println("Best Known: "+parser.getBest_known());
-
             File f = new File(args[2]);
-            //File f = new File("C:\\Users\\Filippo\\Documents\\final\\"+file+"\\"+file+".opt.tour");
             FileWriter fw = new FileWriter(f);
             fw.write("NAME : " + parser.getName() + "\n");
             fw.write("COMMENT : " + parser.getComment() + "\n");
@@ -79,9 +64,8 @@ public class Main {
             for(int i=0;i<antRoute.length-1;i++){
                 fw.write((antRoute[i]+1) + "\n");
             }
-            fw.write("EOF\n");
+            fw.write("-1\nEOF\n");
             fw.close();
-
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }

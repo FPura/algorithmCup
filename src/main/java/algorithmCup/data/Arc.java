@@ -1,7 +1,5 @@
 package algorithmCup.data;
 
-import algorithmCup.algorithms.ant_colony.AntParams;
-
 public class Arc {
 
     private City start;

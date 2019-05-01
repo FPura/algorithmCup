@@ -1,4 +1,5 @@
 package algorithmCup.algorithms;
+
 import algorithmCup.data.Arc;
 import algorithmCup.data.WeightedGraph;
 

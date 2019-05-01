@@ -1,7 +1,7 @@
 package algorithmCup.algorithms.ant_colony;
+
 import algorithmCup.data.Arc;
 import algorithmCup.data.WeightedGraph;
-
 
 public class Ant {
 

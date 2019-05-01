@@ -3,7 +3,6 @@ package algorithmCup.utilities;
 import algorithmCup.Main;
 import algorithmCup.data.City;
 import algorithmCup.data.WeightedGraph;
-import javafx.scene.chart.XYChart;
 
 import java.util.ArrayList;
 import java.util.List;
