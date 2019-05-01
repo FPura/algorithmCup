@@ -88,7 +88,7 @@ class AntColonyTest {
            // AntParams.seed = new Random().nextInt(100000);
             AntParams.ρ = new Random().nextDouble();
             AntParams.ξ = new Random().nextDouble();
-            AntParams.NUMBER_OF_ANTS = new Random().nextInt(3)+2;
+            AntParams.NUMBER_OF_ANTS = 2;//new Random().nextInt(3)+2;
             WeightedGraph.CANDIDATE_LIST_SIZE = new Random().nextInt(30)+13;
             AntParams.DISTANCE_INFLUENCE = new Random().nextInt(9)+1;
             AntParams.EXPLORATION_FACTOR = new Random().nextDouble() * 0.4;
@@ -99,7 +99,7 @@ class AntColonyTest {
                 TimeElapsed.start();
                // parser.parseSeed("C:\\Users\\Filippo\\Documents\\final\\"+files[fileIndex]+"\\"+files[fileIndex]+".seed");
            //     WeightedGraph.CANDIDATE_LIST_SIZE = 30;
-                weightedGraph = parser.parse("C:\\Users\\Filippo\\Documents\\final\\"+files[fileIndex]+"\\"+files[fileIndex]+".tsp");
+                weightedGraph = parser.parse(System.getProperty("user.dir")+"/final/"+files[fileIndex]+"/"+files[fileIndex]+".tsp");
         //        AntParams.EXPLORATION_FACTOR = 0.35;
            //     AntParams.NUMBER_OF_ANTS = 5;
                 AntParams.seed = new Random().nextInt(100000);
@@ -133,7 +133,7 @@ class AntColonyTest {
                 if(routeLength < bestbest[fileIndex] || (routeLength == bestbest[fileIndex] && remainingTime > bestTime[fileIndex])) {
                     bestbest[fileIndex] = routeLength;
                     bestTime[fileIndex] = remainingTime;
-                    File f = new File("C:\\Users\\Filippo\\Documents\\citta\\seeds\\"+files[fileIndex]+".seed");
+                    File f = new File(System.getProperty("user.dir")+"/final/"+files[fileIndex]+".seed");
                     FileWriter fw = new FileWriter(f);
 
                     fw.write("remaining time (ms) : "+bestTime[fileIndex]+"\n");
