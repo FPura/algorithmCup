@@ -67,7 +67,7 @@ public class AntColony implements MetaHeuristic {
                 remainingTime = TimeElapsed.getRemainingTime();
             }
 
-            if (bestGlobalCost == weightedGraph.getBestKnown()) {
+            if (bestGlobalCost == AntParams.STOPAT) {
                 return bestGlobalAntPath;
             }
 

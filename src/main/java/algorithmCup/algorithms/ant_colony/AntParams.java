@@ -12,4 +12,5 @@ public class AntParams {
     public static double ξ;
     public static double DISTANCE_INFLUENCE;
     public static double EXPLORATION_FACTOR;
+    public static int STOPAT;
 }

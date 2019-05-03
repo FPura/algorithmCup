@@ -97,6 +97,7 @@ public class Parser {
     public void parseSeed(String path) throws FileNotFoundException {
         BufferedReader areader = new BufferedReader(new FileReader(path));
         List<String> lines = areader.lines().collect(Collectors.toList());
+        AntParams.STOPAT = Integer.parseInt(lines.get(1).split("\\s*:\\s*")[1]);
         AntParams.seed = Integer.parseInt(lines.get(2).split("\\s*:\\s*")[1]);
         AntParams.ρ = Double.parseDouble(lines.get(3).split("\\s*:\\s*")[1]);
         AntParams.ξ = Double.parseDouble(lines.get(4).split("\\s*:\\s*")[1]);
