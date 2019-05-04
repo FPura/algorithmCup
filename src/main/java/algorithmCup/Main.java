@@ -39,7 +39,7 @@ public class Main {
             NearestNeighbour nn = new NearestNeighbour(weightedGraph.getCities());
             List<City> nnRoute = nn.computeRoute();
             int nnLength = Route.routeTotalLength(nnRoute, weightedGraph);
-            System.out.println("\nAfter NN: "+ nnLength);
+            //System.out.println("\nAfter NN: "+ nnLength);
             AntParams.τ0 = 1.0/ (nnLength * weightedGraph.getCities().size());
             int count=1;
             for(int j = 0; j<weightedGraph.getCities().size(); j++){
@@ -51,6 +51,7 @@ public class Main {
             MetaHeuristic opt = new AntColony();
             int[] antRoute = opt.optimize(weightedGraph);
             long remainingTime = opt.getRemainingTime();
+            System.out.println("File name: "+ parser.getName());
             System.out.println("Remaining time after last change: "+ remainingTime);
             System.out.println("Route length: "+Route.routeTotalLength(antRoute,weightedGraph));
             System.out.println("Best Known: "+parser.getBest_known());
