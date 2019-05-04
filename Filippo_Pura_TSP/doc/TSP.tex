@@ -1,0 +1,54 @@
+%%%%%%%%%%% DTI report %%%%%%%%%%%
+\documentclass[a4paper,11pt,oneside]{DTI}
+
+% *************** Load packages ***************
+\usepackage[T1]{fontenc}
+\usepackage[italian]{babel}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{subfigure}
+\usepackage{makeidx}
+\usepackage[utf8]{inputenc}
+\usepackage{booktabs}
+\usepackage[colorlinks]{hyperref}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{float}
+\usepackage{listings}
+
+\title{Traveling Salesman Problem}
+\subTitle{11\ap{a} Coppa di Algoritmi} 
+\author{Filippo Pura}
+
+\date{\today}
+
+\lstset{language=bash}
+
+% Crea un capitolo senza numerazione che per� appare nell'indice %
+\newcommand{\problemchapter}[1]{%
+  \chapter*{#1}%
+  \addcontentsline{toc}{chapter}{#1}%
+\markright{#1}{}}
+
+%*****************************************************************
+
+% Numerazione delle appendici secondo norma %
+\addto\appendix{\renewcommand{\thesection}{\Alph{section}} 
+\renewcommand{\thesubsection}{\thesection.\arabic{subsection}}}
+%*****************************************************************
+
+\makeindex % Crea l'indice analitico, se è necessario scommentarlo
+\begin{document}
+\maketitle
+\frontmatter
+\newpage
+\mainmatter
+% *************** Main matter ***************
+\include{Problema}
+\include{SoluzioniImplementate}
+\include{EsecuzioneProgramma}
+\include{Framework}
+\include{Risultati}
+\include{Conclusioni}
+\end{document}

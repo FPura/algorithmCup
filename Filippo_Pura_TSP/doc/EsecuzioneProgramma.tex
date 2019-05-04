@@ -1,0 +1,31 @@
+\chapter*{Esecuzione programma}
+\label{cha_esecuzione}
+
+\section*{Piattaforma}
+\label{sec_piattaforma}
+La piattaforma usata è un computer portatile Aspire V3 - 772G. Nella Tabella~\ref{tab_statpc} sono mostrati alcuni parametri rilevanti.
+
+\begin{table}[htb]
+  \caption{Plattaforma usata per i test\label{tab_statpc}}
+  \centering
+\begin{tabular}{ll}
+  \toprule
+  Sistema Operativo		& Windows 8.1 \\
+  Processore			& Intel Core i7 4702MQ @ 2.2GHz \\
+  RAM				& 32GB \\
+  \bottomrule
+\end{tabular}
+\end{table}
+
+\section*{Compilazione ed esecuzione}
+\label{sec_comp_exec}
+Per eseguire l'algoritmo su ogni problema fornito è sufficente eseguire il comando mvn:test.
+Ogni istanza di test avvia il programma principale passando come parametri il percorso per i 
+file input necessari (seed più parametri e informazioni del problema) e il percorso dove salvare
+il file di output del percorso trovato. \\
+Ogni test è limitato a 3 minuti con un secndo di scarto. \\
+Per ogni problema viene anche mostrato su terminale lo stato attuale dell'algoritmo sotto 
+forma di costo del percorso quando esso viene migliorato e un output finale con il tempo 
+mancante allo scadere dei 3 minuti da quando è stata trovata l'ultima soluzione migliore.
+
+
