@@ -5,8 +5,8 @@
 \label{sec_costruttivo}
 È stato utilizzato un algoritmo Nearest Neighbour per comporre una soluzione da cui poter derivare
 il suo costo ed impostare di conseguenza il feromone iniziale degli archi usati per l'algoritmo 
-Ant Colony System.
-Esso è eseguito solo una volta, all'inizio dell'esecuzione sul set di città ricavate dal file.
+Ant Colony System.\newline
+Esso è eseguito solo una volta, all'inizio dell'esecuzione sul set di città ricavate dal file.\newline
 Similarmente viene usata un'implementazione dell'algoritmo di Kruskal per comporre il Minimum Spanning
 Tree, esso viene poi utilizzato per comporre le candidate lists di ogni città, ovvero tutte le città direttamente
 collegate ad essa nel Minimum Spanning Tree più un numero variabile di città più vicine non considerando quelle 
@@ -16,21 +16,27 @@ inserite precedentemente.
 \section*{Algoritmi di ottimizzazione locale}
 \label{sec_ottimizzazione}
 Come ottimizzazione locale ho implementato l'algoritmo Two Opt usando le candidate lists ed un array di
-supporto per trovare in modo rapido gli indici delle città nel percorso. Esso è generato contemporaneamente
-al percorso nell'algoritmo Ant Colony System.
+supporto per trovare in modo rapido gli indici delle città nel percorso.\newline
+Esso è generato contemporaneamente al percorso nell'algoritmo Ant Colony System.\newline
+Il ciclo esterno definisce l'indice 'i', il cui itera da 0 fino alla lunghezza del percorso.\newline
+L'indice 'j' viene derivato dalla posizione nel percorso delle città presenti nella candidate list della città 
+specificata dall'indice 'i'.\newline
+Dopo il completamento del ciclo 'i' esterno si effettua lo scambio con gli indici dai quali si è calcolato
+il guadagno migliore. \newline
+L'algoritmo si ripete fintanto che nessun guadagno viene trovato dopo un'iterazione completa.
 
 \section*{Algoritmi meta-euristici}
 \label{sec_metaeuristici}
 L'algoritmo principale del progetto è composto da un'implementazione leggermente più "greedy" dell'Ant 
-Colony System. 
+Colony System. \newline
 Questo perché in modalità di esplorazione viene comunque considerata la "best choice" ovvero la città
-con più probabilità di venire scelta determinata dalla distanza e dal feromone del suo arco.
-Come parametro del feromone iniziale uso \textit{1/(C(percorso generato dal Nearest Neighbour) * Numero di città)}.
+con più probabilità di venire scelta determinata dalla distanza e dal feromone del suo arco.\newline
+Come parametro del feromone iniziale uso \textit{1/(C(percorso generato dal Nearest Neighbour) * Numero di città)}.\newline
 Come opzione di movimento delle formiche ad ogni avanzamento considero soltanto le città presenti nella candidate list
 della città corrente, nel caso in cui tutte le città presenti in essa siano già state
-visitate viene selezionata la città non visitata più vicina a quella corrente. Dopo aver eseguito una 
-mossa, decremento il feromone dell'arco percorso secondo la formula dell'aggiornamento locale.
+visitate viene selezionata la città non visitata più vicina a quella corrente. \newline
+Dopo aver eseguito una mossa, decremento il feromone dell'arco percorso secondo la formula dell'aggiornamento locale.\newline
 Ogni volta che una formica termina un percorso, prima di eseguire ulteriori controlli, ottimizzo e sostituisco
-il percorso ottenuto dalla formica tramite l'algoritmo Two Opt. L'aggiornamento globale del feromone viene 
-applicato dopo ogni iterazione dell'algortimo, su tutti gli archi del percorso migliore assoluto.
+il percorso ottenuto dalla formica tramite l'algoritmo Two Opt. \newline
+L'aggiornamento globale del feromone viene applicato dopo ogni iterazione dell'algortimo, su tutti gli archi del percorso migliore assoluto.
 
